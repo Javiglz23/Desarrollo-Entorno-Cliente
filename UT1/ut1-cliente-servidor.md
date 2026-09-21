@@ -15,4 +15,9 @@
     Servidor porque necesito la informacion de la factura de la base de datos
 
 - Conservar el tema claro u oscuro en un único dispositivo.
+
+    Cliente ya que se guarda por dispositivo y no por usuario
+
 - Compartir el progreso de un curso entre móvil y portátil.
+
+    Servidor ya que el progreso se guarda en la base de datos. y no en local.
