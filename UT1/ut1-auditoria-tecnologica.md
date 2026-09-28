@@ -135,4 +135,51 @@ Uber tiene un frontend muy bueno, accesible y bien estructurado, aunque falla al
 * Operación con teclado: ![alt text](image-3.png)
 * Comunicación de cambios de estado: ![alt text](image-4.png)
 * Uso de atributos o clases como contrato de comportamiento: ![alt text](image-5.png)
-* Inserión segura de texto no confiable: 
+* Inserión segura de texto no confiable:
+
+## Apartado E: Herramientas y Prueba
+
+ID: P-01
+Objetivo: mirar las cabeceras de seguridad en DevTools
+Preparación: abrir pestaña Network con caché desactivada
+Pasos: recargar uber.com > tocar el primer archivo > mirar Headers
+Esperado: que tenga cabeceras de seguridad básicas
+Obtenido: salen HSTS y nosniff activas
+Conclusión: la seguridad básica está bien puesta
+Límite: solo vemos el CDN, no el servidor por dentro
+
+ID: P-02
+Objetivo: pasar el HTML por el validador W3C
+Preparación: copiar el código de <main> desde el inspector
+Pasos: pegarlo en el W3C Validator y validar
+Esperado: que no haya etiquetas mal cerradas ni fallos graves
+Obtenido: 0 errores, solo avisos por atributos propios de React
+Conclusión: el HTML base está bien montado
+Límite: solo mira el código inicial, no lo que carga luego con JS
+
+ID: P-03
+Objetivo: probar a buscar un viaje y ver precios
+Preparación: entrar a la web en modo incógnito
+Pasos: escribir origen y destino > elegir dirección de la lista
+Esperado: que salgan los coches y tarifas sin recargar la página
+Obtenido: llama a la API y enseña precios de UberX al momento
+Conclusión: el buscador funciona como debe
+Límite: no puedo llegar a pagar porque pide cuenta y tarjeta real
+
+ID: P-04
+Objetivo: usar el buscador solo con el teclado
+Preparación: soltar el ratón y empezar desde arriba
+Pasos: dar a Tab hasta los inputs > bajar con flechas y dar a Enter
+Esperado: ver por dónde va el foco y poder elegir la calle
+Obtenido: el borde se ve claro y el Enter selecciona bien la ruta
+Conclusión: se puede manejar sin ratón perfectamente
+Límite: no lo he probado con un lector de pantalla de voz
+
+ID: P-05
+Objetivo: ver qué pasa si se va el internet al buscar
+Preparación: poner modo "Offline" en la pestaña Network
+Pasos: meter las calles y darle a ver precios
+Esperado: que salga algún mensaje avisando de que no hay red
+Obtenido: falla en consola pero la web se queda con la rueda cargando infinito
+Conclusión: fallo; les falta controlar el error para avisar al usuario
+Límite: es un corte simulado en mi navegador, no un fallo real suyo
