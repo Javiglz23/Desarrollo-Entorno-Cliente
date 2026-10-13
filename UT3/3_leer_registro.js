@@ -17,3 +17,12 @@ window.addEventListener("popstate", () => {
   registroActual = ids.has(id) ? id : "r1";
   mostrarRegistro(registroActual);
 });
+
+function mostrarRegistro(id) {
+  const registros = document.querySelectorAll(".registro");
+  registros.forEach((registro) => {
+    registro.style.display = registro.id === id ? "block" : "none";
+  });
+}
+//comprobar si el registro actual es válido y mostrarlo ns ejecutarlo
+mostrarRegistro(registroActual);

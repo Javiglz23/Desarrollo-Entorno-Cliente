@@ -12,3 +12,5 @@ for (const registro of registros) {
   if (!porZona.has(registro.zona)) porZona.set(registro.zona, []);
   porZona.get(registro.zona).push(registro);
 }
+
+//incompleto

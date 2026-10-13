@@ -16,6 +16,6 @@ revelar.addEventListener("click", () => {
   estado.classList.add("activo");
 
   const entrada = document.createElement("li");
-  entrada.textContent = 'Puerta abierta: <img src=x onerror="alert(1)">';
+  entrada.textContent = 'Puerta abierta: <img src=istockphoto-1147541871-612x612.jpg alt="Puerta abierta" width="100">';
   registros.append(entrada);
 });
