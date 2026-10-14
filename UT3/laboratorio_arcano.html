@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reto de Alquimia</title>
+    <style>
+        :root {
+            --bg-body: #161220;
+            --bg-panel: #201a2b;
+            --bg-input: #2a2235;
+            --accent-gold: #f6c87a;
+            --accent-gold-hover: #e0b368;
+            --text-main: #ffffff;
+            --text-muted: #a49db2;
+            --border-panel: #342a45;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            max-width: 1100px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* --- TOP BAR --- */
+        .top-status {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .pills-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pill {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .pill.active {
+            background-color: var(--accent-gold);
+            color: #1a1525;
+        }
+
+        .pill.inactive {
+            background-color: transparent;
+            color: var(--text-main);
+            border-color: var(--border-panel);
+        }
+
+        /* --- PANELS LAYOUT --- */
+        .panels-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .panel {
+            background-color: var(--bg-panel);
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-panel);
+        }
+
+        /* Panel Izquierdo recibe el borde dorado */
+        .panel-left {
+            border: 1px solid var(--accent-gold);
+        }
+
+        .eyebrow {
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .panel-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .panel-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- OBJETIVO BOX --- */
+        .objective-box {
+            background-color: var(--bg-input);
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .objective-box .label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .objective-box .value {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        /* --- INGREDIENTES SELECTORS --- */
+        .ingredients-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .ingredient-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 0.5rem;
+        }
+
+        .ingredient-group label {
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .select-box {
+            background-color: var(--bg-input);
+            color: var(--text-main);
+            border: 1px solid var(--border-panel);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            appearance: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .plus-sign {
+            font-size: 1.2rem;
+            font-weight: normal;
+            margin-top: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        /* --- BUTTONS --- */
+        .btn-primary {
+            background-color: var(--accent-gold);
+            color: #161220;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 1.5rem;
+            transition: background 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-gold-hover);
+        }
+
+        /* --- RESULT BOX --- */
+        .result-box {
+            background-color: var(--bg-input);
+            border-radius: 8px;
+            padding: 1.2rem;
+            border: 1px solid var(--border-panel);
+        }
+
+        .result-box .eyebrow {
+            margin-bottom: 0.4rem;
+        }
+
+        .result-box p {
+            font-size: 0.95rem;
+        }
+
+        /* --- RIGHT PANEL ESPECIFICOS --- */
+        .header-right {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .attempts-counter {
+            text-align: right;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .attempts-counter .number {
+            color: var(--accent-gold);
+            font-size: 2rem;
+            font-weight: bold;
+            margin-right: 0.3rem;
+        }
+
+        .empty-state {
+            border: 1px dashed var(--border-panel);
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            background-color: rgba(42, 34, 53, 0.3);
+        }
+
+        .actions-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-panel);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--bg-input);
+        }
+
+        .link-text {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .link-text:hover {
+            color: var(--text-main);
+        }
+
+        /* Responsive Breakpoint */
+        @media (max-width: 850px) {
+            .panels-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Top Navigation / Status -->
+        <div class="top-status">
+            Se inició una partida para el reto de la URL.
+        </div>
+        
+        <div class="pills-container">
+            <button class="pill active">
+                <span>✦</span> Luz eterna
+            </button>
+            <button class="pill inactive">
+                <span>❖</span> Antídoto
+            </button>
+        </div>
+
+        <!-- Main Panels -->
+        <div class="panels-grid">
+            
+            <!-- Panel Izquierdo -->
+            <div class="panel panel-left">
+                <div class="eyebrow">01 / MESA DE TRABAJO</div>
+                <h1 class="panel-title">Prueba una pareja</h1>
+                <p class="panel-subtitle">El orden no importa. Las mezclas fallidas también cuentan como intento.</p>
+
+                <div class="objective-box">
+                    <span class="label">OBJETIVO DE ESTA PARTIDA</span>
+                    <span class="value">Luz Eterna</span>
+                </div>
+
+                <div class="ingredients-row">
+                    <div class="ingredient-group">
+                        <label for="ingrediente1">Primer ingrediente</label>
+                        <select id="ingrediente1" class="select-box">
+                            <option value="">Elige</option>
+                            <!-- Añadir opciones dinámicamente con JS -->
+                        </select>
+                    </div>
+                    <div class="plus-sign">+</div>
+                    <div class="ingredient-group">
+                        <label for="ingrediente2">Segundo ingrediente</label>
+                        <select id="ingrediente2" class="select-box">
+                            <option value="">Elige</option>
+                            <!-- Añadir opciones dinámicamente con JS -->
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn-primary" id="btn-combinar">Combinar ingredientes &rarr;</button>
+
+                <div class="result-box">
+                    <div class="eyebrow">RESULTADO</div>
+                    <p id="resultado-texto">Elige dos ingredientes disponibles.</p>
+                </div>
+            </div>
+
+            <!-- Panel Derecho -->
+            <div class="panel panel-right">
+                <div class="header-right">
+                    <div>
+                        <div class="eyebrow">02 / CUADERNO DE MESA</div>
+                        <h2 class="panel-title">Lo que has obtenido</h2>
+                    </div>
+                    <div class="attempts-counter">
+                        <span class="number" id="intentos">0</span> intentos
+                    </div>
+                </div>
+
+                <div class="empty-state" id="cuaderno-contenido">
+                    El cuaderno está vacío. Prueba una pareja en la mesa.
+                </div>
+
+                <div class="actions-right">
+                    <button class="btn-outline">Abrir recetario &nearr;</button>
+                    <a class="link-text" id="btn-reiniciar">Reiniciar reto</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="laboratorio_arcano.js"></script>
+
+</body>
+</html>
