@@ -1,0 +1,7 @@
+{
+  "posts": [
+    { "id": "1", "author": "Ana Ruiz", "content": "Aprendo a filtrar publicaciones con JavaScript", "topic": "JavaScript", "likes": 2, "views": 20, "publishedAt": "2026-11-01T10:00:00.000Z" },
+    { "id": "2", "author": "Leo Martín", "content": "Un diseño CSS que funciona en móvil", "topic": "CSS", "likes": 9, "views": 45, "publishedAt": "2026-11-02T10:00:00.000Z" },
+    { "id": "3", "author": "Sara Vega", "content": "Funciones puras para un feed claro", "topic": "JavaScript", "likes": 0, "views": 12, "publishedAt": "2026-11-03T10:00:00.000Z" }
+  ]
+}

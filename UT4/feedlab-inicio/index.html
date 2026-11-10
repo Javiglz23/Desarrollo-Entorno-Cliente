@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FEEDLAB · Proyecto inicial</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./src/main.js"></script>
+</head>
+<body>
+  <header class="top"><a class="brand" href="#inicio">FEED<span>LAB</span></a><span>Tu laboratorio de publicaciones</span><nav><a href="#feed">Feed</a><a href="#para-ti">Para ti</a><a href="#cuenta">Cuenta</a></nav></header>
+  <main id="inicio">
+    <section class="hero"><p class="eyebrow">DWEC · UT4</p><h1>Un feed construido con JavaScript</h1><p>Consulta, filtra y organiza publicaciones. Las funciones de este proyecto se completan durante las doce sesiones.</p></section>
+    <div class="layout">
+      <div>
+        <section id="feed" class="panel" aria-labelledby="feed-title"><div class="section-head"><div><p class="eyebrow">Publicaciones</p><h2 id="feed-title">Explora el feed</h2></div><span id="feed-status" role="status">Vista inicial · conecta la API en la sesión 1</span></div>
+          <div class="controls"><label>Buscar<input id="search" type="search" placeholder="Una palabra del contenido"></label><label>Temática<select id="topic"><option value="">Todas</option></select></label><label>Orden<select id="order"><option value="recent">Recientes</option><option value="popular">Populares</option><option value="for-you">Para ti</option></select></label></div>
+          <div id="posts" class="cards"><article class="card"><div class="card-top"><span class="badge">JavaScript</span><small>Ejemplo visual</small></div><h3>Tu primera publicación aparecerá aquí</h3><p>La sesión 1 sustituirá esta tarjeta de muestra por datos reales de la API.</p><div class="card-bottom"><span>Por FEEDLAB</span><span>♡ 0 · 0 vistas</span></div></article></div>
+          <button id="show-more" class="show-more" type="button" style="margin-top:1rem;display:none;">Mostrar más publicaciones</button>
+        </section>
+        <section id="para-ti" class="panel"><p class="eyebrow">Sesión 10</p><h2>Para ti</h2><p>Elige tus intereses en el perfil. Aquí aparecerá un orden calculado en tu navegador.</p><div id="recommendations" class="cards"></div></section>
+      </div>
+      <aside>
+        <section class="panel stats"><p class="eyebrow">Sesión 6</p><h2>Estadísticas</h2><div id="stats"><p>El panel se completará cuando programes <code>reduce</code>.</p></div></section>
+        <section id="cuenta" class="panel"><p class="eyebrow">Sesión 9</p><h2>Tu cuenta</h2>
+          <form id="register-form"><h3>Registro</h3><label>Nombre<input name="displayName" autocomplete="name" required minlength="2"></label><label>Correo<input name="email" type="email" autocomplete="email" required></label><label>Contraseña<input name="password" type="password" autocomplete="new-password" required minlength="10"></label><button type="submit">Registrarme</button></form>
+          <form id="login-form"><h3>Iniciar sesión</h3><label>Correo<input name="email" type="email" autocomplete="username" required></label><label>Contraseña<input name="password" type="password" autocomplete="current-password" required></label><button type="submit">Entrar</button></form>
+          <div id="profile" role="status"></div>
+          <button id="logout-button" type="button" style="display:none;margin-top:0.5rem;">Cerrar sesión</button>
+        </section>
+        <section id="crear-post-panel" class="panel" style="margin-top:1rem;"><p class="eyebrow">Sesión 9</p><h2>Crear publicación</h2>
+          <form id="create-post-form">
+            <label>Contenido<textarea id="new-post-content" name="content" placeholder="¿Qué quieres compartir? (3-500 caracteres)" minlength="3" maxlength="500" required rows="3"></textarea></label>
+            <label>Temática<select id="new-post-topic" name="topic" required><option value="">Selecciona temática</option></select></label>
+            <button id="create-post-button" type="submit">Publicar</button>
+            <p id="create-post-status" role="status"></p>
+          </form>
+        </section>
+      </aside>
+    </div>
+  </main>
+  <dialog id="post-dialog" class="dialog"><div class="dialog-body" style="padding:1.5rem;"><button id="post-dialog-close" type="button" style="float:right;">×</button><h3>Detalle de la publicación</h3><div id="post-dialog-content"></div></div></dialog>
+  <footer>FEEDLAB · Proyecto de clase · DWEC</footer>
+</body>
+</html>
