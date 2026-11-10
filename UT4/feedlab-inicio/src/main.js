@@ -30,9 +30,35 @@ consultarPublicaciones()
   });
 
 
-  //aqui las obtengo asiq tengo q cambiar obtenerlas de la otra clase y hacer esto: Mientras se descargan los datos, muestra un mensaje de “Cargando publicaciones…”.
+  //aqui las obtengo asiq tengo q cambiar obtenerlas de la otra clase y hacer esto: 
+  // Mientras se descargan los datos, muestra un mensaje de “Cargando publicaciones…”.
   //Si la petición falla, muestra el error en el contenedor de estado.  
   //Si se reciben publicaciones, genera las tarjetas con document.createElement y textContent.
+
+  function renderizarTarjetas(publicaciones, contenedor) {
+  // Generar las tarjetas en memoria
+  const tarjetas = publicaciones.map(post => {
+    const articulo = document.createElement('article');
+    articulo.className = 'post-card';
+
+    const autor = document.createElement('h3');
+    // textContent garantiza proteccion contra inyeccion XSS
+    autor.textContent = post.author;
+
+    const contenido = document.createElement('p');
+    contenido.textContent = post.content;
+
+    const metadatos = document.createElement('footer');
+    metadatos.textContent = `Tema: ${post.topic} · Likes: ${post.likes}`;
+
+    articulo.append(autor, contenido, metadatos);
+    return articulo;
+  });
+
+  // Reemplazar el contenido previo limpiamente
+  contenedor.replaceChildren(...tarjetas);
+}
+
 
 
 
