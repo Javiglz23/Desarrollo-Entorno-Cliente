@@ -1,5 +1,4 @@
 import { API_BASE_URL } from "./config.js";
-// Contrato: GET /posts devuelve { posts: Publicacion[] }.
 // TODO sesión 1: implementar obtenerPublicaciones con fetch, response.ok y response.json().
 
 export async function obtenerPublicaciones() {
