@@ -3,6 +3,7 @@ import { API_BASE_URL } from "./config.js";
 
 // TODO sesión 1: cargar y representar publicaciones (GET /posts) y temáticas (GET /topics). Contempla carga, vacío y error.
 import { obtenerPublicaciones } from './api.js';
+import { seleccionarPublicaciones, prepararTarjetas } from './feed.js';
 
 
 
@@ -26,7 +27,38 @@ function renderizarTarjetas(tarjetasPreparadas, contenedor) {
 
   contenedor.replaceChildren(...nodos);
 }
+contenedorEstado.textContent = 'Cargando publicaciones…';
 
+//tengo q entender la sesion 2 y ver si está correcta
+
+// 2. Llamamos a obtenerPublicaciones() (que es la que tiene .then y .catch)
+obtenerPublicaciones()
+  .then(publicaciones => {
+    // Filtramos usando tu función de feed.js
+    const filtradas = seleccionarPublicaciones(publicaciones, post => post.likes >= 10);
+
+    // Comprobación de inmutabilidad en consola
+    console.log(`Originales: ${publicaciones.length} | Filtradas: ${filtradas.length}`);
+
+    // Transformamos los datos con tu segunda función de feed.js
+    const tarjetasPreparadas = prepararTarjetas(filtradas, post => ({
+      autor: post.author,
+      contenido: post.content,
+      metadatos: `Tema: ${post.topic} · ${post.likes} likes`
+    }));
+
+    // Pintamos en el DOM
+    if (tarjetasPreparadas.length === 0) {
+      contenedorEstado.textContent = 'No hay publicaciones disponibles.';
+      contenedorPosts.replaceChildren();
+    } else {
+      contenedorEstado.textContent = '';
+      renderizarTarjetas(tarjetasPreparadas, contenedorPosts);
+    }
+  })
+  .catch(err => {
+    contenedorEstado.textContent = `Error al cargar publicaciones: ${err.message}`;
+  });
 
 
 // TODO sesión 4: filtros de publicaciones y comparación entre filtrado en cliente y en API.
