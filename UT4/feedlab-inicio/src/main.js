@@ -2,65 +2,118 @@
 import { API_BASE_URL } from "./config.js";
 
 // TODO sesión 1: cargar y representar publicaciones (GET /posts) y temáticas (GET /topics). Contempla carga, vacío y error.
+import { obtenerPublicaciones } from './api.js';
+import { seleccionarPublicaciones, prepararTarjetas } from './feed.js';
+import { puntuarPublicacion, crearPuntuador } from './recomendaciones.js';
 
-async function consultarPublicaciones() {
-  const url = `${API_BASE_URL}/posts`;
+const contenedorEstado = document.querySelector('#estado');
+const contenedorPosts = document.querySelector('#posts-container');
 
-  const respuesta = await fetch(url);
-  if (!respuesta.ok) {
-    throw new Error(`Respuesta insatisfactoria del servidor: ${respuesta.status}`);
-  }
-
-  const datos = await respuesta.json();
-
-  if (!Array.isArray(datos.posts)) {
-    throw new TypeError('El contrato de la API no contiene el array posts esperado');
-  }
-
-  return datos.posts;
-}
-
-// Invocación y control de errores
-consultarPublicaciones()
-  .then(publicaciones => {
-    console.log(`Se han recibido ${publicaciones.length} publicaciones:`, publicaciones);
-  })
-  .catch(err => {
-    console.error('Error al cargar publicaciones:', err.message);
-  });
-
-
-  //aqui las obtengo asiq tengo q cambiar obtenerlas de la otra clase y hacer esto: 
-  // Mientras se descargan los datos, muestra un mensaje de “Cargando publicaciones…”.
-  //Si la petición falla, muestra el error en el contenedor de estado.  
-  //Si se reciben publicaciones, genera las tarjetas con document.createElement y textContent.
-
-  function renderizarTarjetas(publicaciones, contenedor) {
-  // Generar las tarjetas en memoria
-  const tarjetas = publicaciones.map(post => {
+function renderizarTarjetas(tarjetasPreparadas, contenedor) {
+  const nodos = tarjetasPreparadas.map(tarjeta => {
     const articulo = document.createElement('article');
     articulo.className = 'post-card';
 
     const autor = document.createElement('h3');
-    // textContent garantiza proteccion contra inyeccion XSS
-    autor.textContent = post.author;
+    autor.textContent = tarjeta.autor;
 
     const contenido = document.createElement('p');
-    contenido.textContent = post.content;
+    contenido.textContent = tarjeta.contenido;
 
     const metadatos = document.createElement('footer');
-    metadatos.textContent = `Tema: ${post.topic} · Likes: ${post.likes}`;
+    metadatos.textContent = tarjeta.metadatos;
 
     articulo.append(autor, contenido, metadatos);
     return articulo;
   });
 
-  // Reemplazar el contenido previo limpiamente
-  contenedor.replaceChildren(...tarjetas);
+  contenedor.replaceChildren(...nodos);
 }
 
+function comprobarMotorRecomendaciones() {
+  console.group('--- Comprobación del motor de recomendaciones ---');
 
+  const postsMuestra = [
+    { id: 1, author: 'Laura', topic: 'JavaScript', likes: 12, content: 'Closures en JS' },
+    { id: 2, author: 'Mario', topic: 'Videojuegos', likes: 35, content: 'Análisis indie' },
+    { id: 3, author: 'Sofía', topic: 'Diseño', likes: 8, content: 'Sistemas de color' }
+  ];
 
+  const snapshotOriginal = JSON.stringify(postsMuestra);
+
+  // Perfiles independientes con closures
+  const interesesAna = ['JavaScript'];
+  const puntuarParaAna = crearPuntuador(interesesAna);
+  const puntuarParaCarlos = crearPuntuador(['Videojuegos']);
+
+  // Mutación externa para verificar aislamiento del closure
+  interesesAna.push('Videojuegos');
+
+  postsMuestra.forEach(post => {
+    console.log(
+      `Post #${post.id} [${post.topic}, ${post.likes} likes] -> Ana: ${puntuarParaAna(post)} pts | Carlos: ${puntuarParaCarlos(post)} pts`
+    );
+  });
+
+  // Verificación de inmutabilidad
+  console.log('¿Publicaciones originales intactas?:', JSON.stringify(postsMuestra) === snapshotOriginal);
+
+  // Verificación de TypeError en entradas inválidas
+  const casosInvalidos = [
+    { desc: 'likes negativos', fn: () => puntuarPublicacion({ topic: 'JavaScript', likes: -1 }, ['JavaScript']) },
+    { desc: 'publicación nula', fn: () => puntuarParaAna(null) },
+    { desc: 'intereses no array', fn: () => crearPuntuador('JavaScript') }
+  ];
+
+  casosInvalidos.forEach(({ desc, fn }) => {
+    try {
+      fn();
+      console.error(`FALLO: "${desc}" debería haber lanzado TypeError.`);
+    } catch (error) {
+      console.log(`OK (${desc}) -> Lanzó ${error.name}: ${error.message}`);
+    }
+  });
+
+  console.groupEnd();
+}
+
+async function iniciar() {
+  // 1. Estado de carga
+  contenedorEstado.textContent = 'Cargando publicaciones…';
+
+  try {
+    const publicaciones = await obtenerPublicaciones();
+
+    // 2. Filtrar con seleccionarPublicaciones
+    const filtradas = seleccionarPublicaciones(publicaciones, post => post.likes >= 10);
+
+    // Comprobación de inmutabilidad en consola
+    console.log(`Inmutabilidad feed -> Original: ${publicaciones.length} | Filtradas: ${filtradas.length}`);
+
+    // 3. Transformar datos con prepararTarjetas
+    const tarjetasListas = prepararTarjetas(filtradas, post => ({
+      autor: post.author,
+      contenido: post.content,
+      metadatos: `Tema: ${post.topic} · Likes: ${post.likes}`
+    }));
+
+    // 4. Estado vacío o renderizado
+    if (tarjetasListas.length === 0) {
+      contenedorEstado.textContent = 'No hay publicaciones disponibles.';
+      contenedorPosts.replaceChildren();
+      return;
+    }
+
+    contenedorEstado.textContent = '';
+    renderizarTarjetas(tarjetasListas, contenedorPosts);
+  } catch (error) {
+    // 5. Estado de error
+    contenedorEstado.textContent = `Error al cargar publicaciones: ${error.message}`;
+  }
+}
+
+comprobarMotorRecomendaciones();
+iniciar();
 
 // TODO sesión 4: filtros de publicaciones y comparación entre filtrado en cliente y en API.
 // TODO sesión 5: ordenación, paginación con servidor (limit/offset), botón «Mostrar más» y vista de detalle (GET /posts/{id}).
