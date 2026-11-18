@@ -35,7 +35,7 @@ function buscarPublicaciones(lista, texto, tema) {
   const query = normalizarTexto(texto);
 
   return lista.filter(post => {
-    const coincideTema = !temaSeleccionado || post.topic === temaSeleccionado;
+    const coincideTema = !tema || post.topic === tema;
     const coincideTexto = !query || normalizarTexto(post.content).includes(query)|| normalizarTexto(post.author).includes(query);
     return coincideTema && coincideTexto;
   });

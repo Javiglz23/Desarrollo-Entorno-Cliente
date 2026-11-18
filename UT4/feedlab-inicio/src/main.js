@@ -3,7 +3,8 @@ import { API_BASE_URL } from "./config.js";
 
 // TODO sesión 1: cargar y representar publicaciones (GET /posts) y temáticas (GET /topics). Contempla carga, vacío y error.
 import { obtenerPublicaciones } from './api.js';
-import { seleccionarPublicaciones, prepararTarjetas } from './feed.js';
+import { seleccionarPublicaciones, prepararTarjetas,buscarPublicaciones } from './feed.js';
+import { puntuarPublicacion, crearPuntudador } from './recomendaciones.js';
 
 
 
@@ -29,7 +30,7 @@ function renderizarTarjetas(tarjetasPreparadas, contenedor) {
 }
 contenedorEstado.textContent = 'Cargando publicaciones…';
 
-//tengo q entender la sesion 2 y ver si está correcta, añadir sesion 3,añadir sesion 4,añadir sesion 5
+//tengo q entender la sesion 2 y ver si está correcta,añadir sesion 4,añadir sesion 5
 
 // 2. Llamamos a obtenerPublicaciones() (que es la que tiene .then y .catch)
 obtenerPublicaciones()
@@ -62,7 +63,27 @@ obtenerPublicaciones()
 
 
 // TODO sesión 4: filtros de publicaciones y comparación entre filtrado en cliente y en API.
+
+addEventListener ('DOMContentLoaded', () => {
+  const inputTexto = document.getElementById('filtro-texto');
+  const selectTema = document.getElementById('filtro-tema');
+
+  inputTexto.addEventListener('input', () => {
+    const texto = inputTexto.value;
+    const tema = selectTema.value || null;
+    // Aquí deberías llamar a buscarPublicaciones() y actualizar la vista
+    buscarPublicaciones(publicaciones, texto, tema);
+  });
+
+  selectTema.addEventListener('change', () => {
+    const texto = inputTexto.value;
+    const tema = selectTema.value || null;
+    // Aquí deberías llamar a buscarPublicaciones() y actualizar la vista
+    buscarPublicaciones(publicaciones, texto, tema);
+  });
+});
 // TODO sesión 5: ordenación, paginación con servidor (limit/offset), botón «Mostrar más» y vista de detalle (GET /posts/{id}).
+
 // TODO sesión 6: estadísticas con reduce sobre las publicaciones cargadas.
 // TODO sesión 9: autenticación (registro/login/logout), restaurar likes (GET /users/me/likes) y crear publicaciones (POST /posts).
 // TODO sesión 10: cálculo del feed personalizado «Para ti» en el cliente según intereses.
