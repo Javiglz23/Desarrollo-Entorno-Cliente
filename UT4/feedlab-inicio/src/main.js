@@ -29,7 +29,7 @@ function renderizarTarjetas(tarjetasPreparadas, contenedor) {
 }
 contenedorEstado.textContent = 'Cargando publicaciones…';
 
-//tengo q entender la sesion 2 y ver si está correcta
+//tengo q entender la sesion 2 y ver si está correcta, añadir sesion 3,añadir sesion 4,añadir sesion 5
 
 // 2. Llamamos a obtenerPublicaciones() (que es la que tiene .then y .catch)
 obtenerPublicaciones()

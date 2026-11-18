@@ -25,4 +25,30 @@ export function prepararTarjetas(posts, transformadora) {
 
 
 // TODO sesión 4: buscarPublicaciones(lista, texto, tema).
+
+function normalizarTexto(texto) {
+  return texto.trim().toLocaleLowerCase('es-ES');
+}
+
+function buscarPublicaciones(lista, texto, tema) {
+
+  const query = normalizarTexto(texto);
+
+  return lista.filter(post => {
+    const coincideTema = !temaSeleccionado || post.topic === temaSeleccionado;
+    const coincideTexto = !query || normalizarTexto(post.content).includes(query)|| normalizarTexto(post.author).includes(query);
+    return coincideTema && coincideTexto;
+  });
+}
+
 // TODO sesión 5: ordenarRecientes(lista) y ordenarPopulares(lista).
+
+function ordenarPopularidad(lista) {
+  return [...lista].sort((a, b) => b.likes - a.likes);
+}
+
+function ordenarRecientes(lista) {
+  return [...lista].sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
+
