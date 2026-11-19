@@ -30,7 +30,7 @@ function normalizarTexto(texto) {
   return texto.trim().toLocaleLowerCase('es-ES');
 }
 
-function buscarPublicaciones(lista, texto, tema) {
+export function buscarPublicaciones(lista, texto, tema) {
 
   const query = normalizarTexto(texto);
 
@@ -43,12 +43,16 @@ function buscarPublicaciones(lista, texto, tema) {
 
 // TODO sesión 5: ordenarRecientes(lista) y ordenarPopulares(lista).
 
-function ordenarPopularidad(lista) {
-  return [...lista].sort((a, b) => b.likes - a.likes);
+export function ordenarPorRecientes(lista) {
+  return [...lista].sort((a, b) => {
+    const diffFecha = new Date(b.publishedAt) - new Date(a.publishedAt);
+    return diffFecha !== 0 ? diffFecha : b.id - a.id;
+  });
 }
 
-function ordenarRecientes(lista) {
-  return [...lista].sort((a, b) => new Date(b.date) - new Date(a.date));
+export function ordenarPorPopulares(lista) {
+  return [...lista].sort((a, b) => {
+    const diffLikes = b.likes - a.likes;
+    return diffLikes !== 0 ? diffLikes : b.id - a.id;
+  });
 }
-
-

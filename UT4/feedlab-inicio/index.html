@@ -40,7 +40,19 @@
       </aside>
     </div>
   </main>
-  <dialog id="post-dialog" class="dialog"><div class="dialog-body" style="padding:1.5rem;"><button id="post-dialog-close" type="button" style="float:right;">×</button><h3>Detalle de la publicación</h3><div id="post-dialog-content"></div></div></dialog>
-  <footer>FEEDLAB · Proyecto de clase · DWEC</footer>
+<!-- Estructura base para el modal en index.html -->
+<dialog id="post-dialog" class="post-dialog">
+  <article class="dialog-content">
+    <header class="dialog-header">
+      <h3 id="dialog-author"></h3>
+      <button id="dialog-close-btn" type="button" aria-label="Cerrar">✕</button>
+    </header>
+    <p id="dialog-body"></p>
+    <footer class="dialog-footer">
+      <span id="dialog-topic" class="badge"></span>
+      <span id="dialog-meta"></span>
+    </footer>
+  </article>
+</dialog>  <footer>FEEDLAB · Proyecto de clase · DWEC</footer>
 </body>
 </html>

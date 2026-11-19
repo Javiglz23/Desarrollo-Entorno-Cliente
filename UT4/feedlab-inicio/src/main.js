@@ -64,22 +64,22 @@ obtenerPublicaciones()
 
 // TODO sesión 4: filtros de publicaciones y comparación entre filtrado en cliente y en API.
 
-addEventListener ('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
   const inputTexto = document.getElementById('filtro-texto');
   const selectTema = document.getElementById('filtro-tema');
 
   inputTexto.addEventListener('input', () => {
     const texto = inputTexto.value;
     const tema = selectTema.value || null;
-    // Aquí deberías llamar a buscarPublicaciones() y actualizar la vista
-    buscarPublicaciones(publicaciones, texto, tema);
+    const filtradas = buscarPublicaciones(publicaciones, texto, tema);
+    renderizarTarjetas(filtradas, contenedorPosts);
   });
 
   selectTema.addEventListener('change', () => {
     const texto = inputTexto.value;
     const tema = selectTema.value || null;
-    // Aquí deberías llamar a buscarPublicaciones() y actualizar la vista
-    buscarPublicaciones(publicaciones, texto, tema);
+    const filtradas = buscarPublicaciones(publicaciones, texto, tema);
+    renderizarTarjetas(filtradas, contenedorPosts);
   });
 });
 // TODO sesión 5: ordenación, paginación con servidor (limit/offset), botón «Mostrar más» y vista de detalle (GET /posts/{id}).
