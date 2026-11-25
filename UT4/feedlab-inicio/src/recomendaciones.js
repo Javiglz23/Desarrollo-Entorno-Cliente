@@ -1,7 +1,7 @@
 // Regla única de la unidad: 10 puntos por tema de interés + min(likes, 20).
 // TODO sesión 3: crear una función pura de puntuación.
 
-function puntuarPublicacion(publicacion, intereses) {
+export function puntuarPublicacion(publicacion, intereses) {
     if (!publicacion || typeof publicacion !== 'object' || !Number.isInteger(publicacion.likes) || !Array.isArray(intereses)) {
         throw new Error('Datos inválidos');
     }
@@ -12,7 +12,7 @@ function puntuarPublicacion(publicacion, intereses) {
     return puntosTema + puntosLikes;
 }
 
-function crearPuntudador(intereses) {
+export function crearPuntudador(intereses) {
     if (!Array.isArray(intereses)) {
         throw new Error('Intereses debe ser un array');
     }
